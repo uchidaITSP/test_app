@@ -2,10 +2,34 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:test_app/root.dart';
+import 'package:test_app/routes/login_route.dart';
+import 'package:test_app/screen/login_screen.dart';
 
-void main() {
-  runApp(MyApp());
+
+void main() => runApp(new Login());
+
+final routes = {
+  '/login': (BuildContext context) => new LoginPage(),
+  '/': (BuildContext context) => new LoginPage(),
+};
+
+class Login extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return new MaterialApp(
+      title: 'Sqflite App',
+      theme: new ThemeData(primarySwatch: Colors.red),
+      routes: routes,
+    );
+  }
 }
+//void main() {
+//  runApp(
+//    MaterialApp(
+//      home: Myapp(),
+//    ),
+//  );
+//}
 
 class MyApp extends StatelessWidget {
   @override
