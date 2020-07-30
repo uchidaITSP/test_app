@@ -1,11 +1,12 @@
-
 import 'package:flutter/material.dart';
+import 'package:test_app/models/user.dart';
 import 'package:test_app/routes/search_route.dart';
 
 class Home extends StatelessWidget { // <- (※1)
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
             title: Row(
@@ -130,7 +131,7 @@ class _buttonArea extends StatelessWidget {
           Expanded(
             child: Column(
               children: <Widget>[
-                Icon(Icons.star),
+                Icon(Icons.location_on),
                 Container(
                   margin: const EdgeInsets.only(top: 15.0),
                   child: Text('現在地からさがす'),
@@ -141,7 +142,7 @@ class _buttonArea extends StatelessWidget {
           Expanded(
             child: Column(
               children: <Widget>[
-                Icon(Icons.star),
+                Icon(Icons.center_focus_weak),
                 Container(
                   margin: const EdgeInsets.only(top: 15.0),
                   child: Text('QRコードでさがす'),

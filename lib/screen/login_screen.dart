@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:test_app/main.dart';
 import 'package:test_app/models/user.dart';
-import 'package:test_app/routes/home_route.dart';
-import 'package:test_app/screen/home_page.dart';
 import 'package:test_app/services/response/login_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   @override
+//  createStateでStateを作成
   _LoginPageState createState() => new _LoginPageState();
 }
 
 enum LoginStatus { notSignIn, signIn }
 
 class _LoginPageState extends State<LoginPage> implements LoginCallBack {
+//  ログイン状態を入れるStatusに未ログイン状態をセット
   LoginStatus _loginStatus = LoginStatus.notSignIn;
   BuildContext _ctx;
   bool _isLoading = false;
@@ -62,30 +62,46 @@ class _LoginPageState extends State<LoginPage> implements LoginCallBack {
     setState(() {
       preferences.setInt("value", null);
       preferences.commit();
+//      ログイン状態に未ログイン状態をセットする
       _loginStatus = LoginStatus.notSignIn;
     });
   }
 
   @override
   void initState() {
+//    Stateの初期化
     super.initState();
     getPref();
   }
 
   @override
   Widget build(BuildContext context) {
+//    ここで分岐?既にログイン状態なら次のページを出すようにする
+//    未ログイン状態ならログインページを出す
     switch (_loginStatus) {
       case LoginStatus.notSignIn:
         _ctx = context;
-        var loginBtn = new RaisedButton(
-          onPressed: _submit,
-          child: new Text("ログイン", style: TextStyle(
-            color: Colors.white70
-          ),),
+        final _passwordFocusNode = FocusNode();
+
+//        ログインボタンの設定
+        var loginBtn = new ButtonTheme(
+          minWidth: 300.0,
+          height: 50.0,
+          child: RaisedButton(
+           onPressed: _submit,
+           child: new Text("ログイン", style: TextStyle(
+            color: Colors.white70,
+            fontSize: 18.0,
+            ),
+           ),
           color: Colors.red,
+          ),
         );
+//        ログインページの中身の設定
         var loginForm = new Column(
+//          横の位置の設定
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             new Form(
               key: formKey,
@@ -95,7 +111,11 @@ class _LoginPageState extends State<LoginPage> implements LoginCallBack {
                     padding: const EdgeInsets.all(10.0),
                     child: new TextFormField(
                       onSaved: (val) => _username = val,
-                      decoration: new InputDecoration(labelText: "電話番号 または メールアドレス"),
+                      decoration: new InputDecoration(labelText: "お名前"/*電話番号 または メールアドレス*/),
+                      textInputAction: TextInputAction.next,
+                      onFieldSubmitted: (_) {
+                        FocusScope.of(context).requestFocus(_passwordFocusNode);
+                      },
                     ),
                   ),
                   new Padding(
@@ -103,18 +123,23 @@ class _LoginPageState extends State<LoginPage> implements LoginCallBack {
                     child: new TextFormField(
                       onSaved: (val) => _password = val,
                       decoration: new InputDecoration(labelText: "パスワード"),
+                      obscureText: true,
+                      focusNode: _passwordFocusNode,
                     ),
                   )
                 ],
               ),
             ),
-            loginBtn
+            loginBtn,
           ],
         );
 
+//        表示するもの(画面の構成的な)
         return new Scaffold(
           appBar: new AppBar(
-            title: new Text("ログイン"),
+            title: Center(
+                child: new Text("ログイン"),
+            ),
           ),
           key: scaffoldKey,
           body: new Container(
@@ -124,16 +149,20 @@ class _LoginPageState extends State<LoginPage> implements LoginCallBack {
           ),
         );
         break;
+
+//        ログインしてる時の処理
       case LoginStatus.signIn:
-//        変更コード（とりあえず繋げただけ）
-//        return MyApp();
+//        変更コード
+        return MyApp();
 //        元コード
-        return HomeScreen(signOut);
+//        return HomeScreen(signOut);
         break;
     }
   }
 
+//  ログイン成功時に値を入れる
   savePref(int value,String user, String pass) async {
+//    SharedPreferences でアプリのほうにデータを残す→再起動してもそのまま
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       preferences.setInt("value", value);
@@ -154,15 +183,16 @@ class _LoginPageState extends State<LoginPage> implements LoginCallBack {
   @override
   void onLoginSuccess(User user) async {
 
+//    userに何か入っている→ログインに成功
     if(user != null){
       savePref(1,user.username, user.password);
       _loginStatus = LoginStatus.signIn;
+//      userに何も入っていない→ログインに失敗
     }else{
       _showSnackBar("ログインに失敗しました。\n正しいログイン情報を入力してください");
       setState(() {
         _isLoading = false;
       });
     }
-
   }
 }

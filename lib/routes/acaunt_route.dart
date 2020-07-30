@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:test_app/models/user.dart';
+import '../main.dart';
 
 class Acount extends StatelessWidget { // <- (※1)
   @override
@@ -13,7 +16,7 @@ class Acount extends StatelessWidget { // <- (※1)
                 child: Text('アカウント'),
               )
             ],
-          )
+          ),
       ),
       body: Container(
         child: Column(
@@ -22,7 +25,7 @@ class Acount extends StatelessWidget { // <- (※1)
             _Acountmain(),
           ],
         ),
-      ) // <- (※3)
+      )// <- (※3)
     );
   }
 }
@@ -88,33 +91,39 @@ class _Acountmain extends StatelessWidget {
                     title: Text('基本情報'),
                     trailing: Icon(Icons.arrow_forward_ios),
                     onTap: (){
-
                     },
                   ),
-                  ListTile(
-                    title: Text('会員登録'),
-                    trailing: Icon(Icons.arrow_forward_ios),
-                    onTap: (){
-
-                    },
-                  ),
-                  ListTile(
-                    title: Text('ログイン'),
-                    trailing: Icon(Icons.arrow_forward_ios),
-                    onTap: (){
-
-                    },
-                  ),
+//                  ListTile(
+//                    title: Text('会員登録'),
+//                    trailing: Icon(Icons.arrow_forward_ios),
+//                    onTap: (){
+//
+//                    },
+//                  ),
+//                  ListTile(
+//                    title: Text('ログイン'),
+//                    trailing: Icon(Icons.arrow_forward_ios),
+//                    onTap: (){
+//
+//                    },
+//                  ),
                   ListTile(
                     title: Text('ログアウト'),
                     trailing: Icon(Icons.arrow_forward_ios),
-                    onTap: (){
-
+                    onTap: () async {
+//                      アプリ内に保存されたデータを削除
+                      SharedPreferences preferences = await SharedPreferences.getInstance();
+                      preferences.remove("value");
+                      // 画面をすべて除いてログイン画面を表示
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) => new Login()),
+                              (_) => false);
                     },
                   ),
                 ],
               ).toList(),
-
 //              children: <Widget>[
 //
 //                ListTile(
