@@ -152,6 +152,7 @@ class _LoginPageState extends State<LoginPage> implements LoginCallBack {
 
 //        ログインしてる時の処理
       case LoginStatus.signIn:
+
 //        変更コード
         return MyApp();
 //        元コード

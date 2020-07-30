@@ -31,12 +31,15 @@ dependencies:
 #  login  変更箇所
   sqflite: any
   shared_preferences: ^0.5.4
+  uuid: 2.0.4
 
-#infoOfLogin変更箇所
-  provider: ^4.3.0
-  path_provider: ^1.6.0
+
   intl: ^0.16.0
   datetime_picker_formfield: ^1.0.0
+  barcode_scan: ^2.0.1
+  page_view_indicators: ^1.1.0
+  provider: ^4.3.0
+  path_provider: ^1.6.0
 
 dev_dependencies:
   flutter_test:

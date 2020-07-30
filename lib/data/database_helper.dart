@@ -6,14 +6,16 @@ import 'package:path/path.dart';
 import 'dart:async';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:test_app/models/todo.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = new DatabaseHelper.internal();
   factory DatabaseHelper() => _instance;
 
   static Database _db;
+  static final _tableName = "Todo";
 
-  Future<Database> get db async {
+  Future<Database> get database async {
     if (_db != null) {
       return _db;
     }
@@ -41,5 +43,39 @@ class DatabaseHelper {
 
     var ourDb = await openDatabase(path);
     return ourDb;
+  }
+  createTodo(Todo todo) async {
+    final db = await database;
+    var res = await db.insert(_tableName, todo.toMap());
+    return res;
+  }
+
+  getAllTodos() async {
+    final db = await database;
+    var res = await db.query(_tableName);
+    List<Todo> list =
+    res.isNotEmpty ? res.map((c) => Todo.fromMap(c)).toList() : [];
+    return list;
+  }
+
+  updateTodo(Todo todo) async {
+    final db = await database;
+    var res  = await db.update(
+        _tableName,
+        todo.toMap(),
+        where: "id = ?",
+        whereArgs: [todo.id]
+    );
+    return res;
+  }
+
+  deleteTodo(String id) async {
+    final db = await database;
+    var res = db.delete(
+        _tableName,
+        where: "id = ?",
+        whereArgs: [id]
+    );
+    return res;
   }
 }

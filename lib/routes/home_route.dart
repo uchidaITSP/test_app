@@ -1,6 +1,15 @@
+
+
+import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:test_app/models/user.dart';
 import 'package:test_app/routes/search_route.dart';
+
+//QRコードスキャン機能
+class ScanPage extends StatefulWidget {
+  @override
+  _buttonArea createState() => _buttonArea();
+}
 
 class Home extends StatelessWidget { // <- (※1)
   @override
@@ -32,7 +41,7 @@ class Home extends StatelessWidget { // <- (※1)
             children: <Widget>[
               _topArea(),
               _titleArea(),
-              _buttonArea(),
+              ScanPage(),
               _bottomArea()
             ],
           ),
@@ -117,7 +126,9 @@ class _titleArea extends StatelessWidget {
   }
 }
 
-class _buttonArea extends StatelessWidget {
+class _buttonArea extends State<ScanPage> {
+
+  String qrCodeResult = "何もありません";
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -143,10 +154,21 @@ class _buttonArea extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 Icon(Icons.center_focus_weak),
-                Container(
-                  margin: const EdgeInsets.only(top: 15.0),
-                  child: Text('QRコードでさがす'),
+                FlatButton(
+                  child: Text('QRコードで探す'),
+                  onPressed: () async{
+                    //QRコード機能実装
+                    String codeSander = await BarcodeScanner.scan();
+                    setState(() {
+                      qrCodeResult = codeSander;
+                    });
+                  },
+
                 )
+//                Container(
+//                  margin: const EdgeInsets.only(top: 15.0),
+//                  child: Text('QRコードでさがす'),
+//                )
               ],
             ),
           )
