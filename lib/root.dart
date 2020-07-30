@@ -1,5 +1,8 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'routes/home_route.dart';
 import 'routes/search_route.dart';
@@ -20,8 +23,8 @@ class _RootWidget extends State<RootWidget>{
     'ホーム' : {'icon': Icons.home, 'route':Home()},
     'さがす' : {'icon': Icons.search, 'route':Search()},
     'お知らせ' : {'icon': Icons.notifications, 'route':News()},
-    'アカウント' : {'icon': Icons.home, 'route':Acount()},
-    '調べる' : {'icon':Icons.home,'route':Investigate()},
+    'アカウント' : {'icon': Icons.person, 'route':Acount()},
+    '調べる' : {'icon':Icons.book,'route':Investigate()},
   };
 
   final List _RootWidgetItemOrder = [
@@ -56,15 +59,15 @@ class _RootWidget extends State<RootWidget>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body : _RootWidgetIcons[_RootWidgetItemOrder.asMap()[_selectedIndex]]['route'],
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: _bottomNavigationBarItems,
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        selectedItemColor: Colors.pinkAccent,
-        unselectedItemColor: Colors.black45,
-      ),
+          body : _RootWidgetIcons[_RootWidgetItemOrder.asMap()[_selectedIndex]]['route'],
+          bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          items: _bottomNavigationBarItems,
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+          selectedItemColor: Colors.pinkAccent,
+          unselectedItemColor: Colors.black45,
+          ),
     );
   }
 }
