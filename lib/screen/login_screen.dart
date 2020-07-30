@@ -126,9 +126,9 @@ class _LoginPageState extends State<LoginPage> implements LoginCallBack {
         break;
       case LoginStatus.signIn:
 //        変更コード（とりあえず繋げただけ）
-//        return MyApp();
+        return MyApp();
 //        元コード
-        return HomeScreen(signOut);
+//        return HomeScreen(signOut);
         break;
     }
   }
