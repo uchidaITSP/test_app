@@ -50,6 +50,7 @@ class Home extends StatelessWidget { // <- (※1)
     );
   }
 }
+
 class _topArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
