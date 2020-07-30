@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:test_app/models/todo.dart';
+import 'package:test_app/view/todo_new/todo_new_view.dart';
+import 'package:test_app/view/todo_edit/todo_edit_view.dart';
+import 'package:test_app/data/CtrQuery/todo_bloc.dart';
+import 'package:provider/provider.dart';
 
 class Acount extends StatelessWidget { // <- (※1)
   @override
@@ -16,10 +21,16 @@ class Acount extends StatelessWidget { // <- (※1)
           )
       ),
       body: Container(
-        child: Column(
+
+        child: Wrap(
+          direction: Axis.horizontal,
           children: <Widget>[
             _Acounttop(),
-            _Acountmain(),
+            Provider<TodoBloc>(
+              create: (context) => new TodoBloc(),
+              dispose: (context, bloc) => bloc.dispose(),
+             child: _Acountmain(),
+            )
           ],
         ),
       ) // <- (※3)
@@ -43,7 +54,7 @@ class _Acounttop extends StatelessWidget {
               children: <Widget>[
                 Container(
                   margin: const EdgeInsets.fromLTRB(5, 50, 0, 5),
-                  child: Text('粟谷陸'),
+                  child: Text("粟谷陸"),
                 ),
                 Flexible(
                   child: Row(
@@ -66,9 +77,13 @@ class _Acounttop extends StatelessWidget {
 }
 
 class _Acountmain extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final _bloc = Provider.of<TodoBloc>(context, listen: false);
+
+
+     return Container(
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,67 +92,104 @@ class _Acountmain extends StatelessWidget {
             child: Text('アカウント設定'),
           ),
           Container(
-            child:ListView(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
+            child: StreamBuilder<List<Todo>> (
+                stream: _bloc.todoStream,
+                // ignore: missing_return
+                builder: (context, AsyncSnapshot<List<Todo>> snapshot) {
+                  if(snapshot.hasData) {
+//                 ListView.builderでfor文のような繰り返し処理
+                    return ListView.builder(
 
-              children: ListTile.divideTiles(
-                context: context,
-                tiles: [
-                  ListTile(
-                    title: Text('基本情報'),
-                    trailing: Icon(Icons.arrow_forward_ios),
-                    onTap: (){
+//                  child: ListView(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+//                        下のcontainerで回しているitemをどれくらい繰り返すか
+                        itemCount: 1,
+//                      // ignore: missing_return
+                        itemBuilder: (BuildContext context, int index) {
+//                        Todoの情報を取得している
+//                      　 indexでデータベースのどこを処理したいかを設定(ここにログインした人の情報を入れる)
+                        Todo todo = snapshot.data[1];
 
-                    },
-                  ),
-                  ListTile(
-                    title: Text('会員登録'),
-                    trailing: Icon(Icons.arrow_forward_ios),
-                    onTap: (){
-
-                    },
-                  ),
-                  ListTile(
-                    title: Text('ログイン'),
-                    trailing: Icon(Icons.arrow_forward_ios),
-                    onTap: (){
-
-                    },
-                  ),
-                  ListTile(
-                    title: Text('ログアウト'),
-                    trailing: Icon(Icons.arrow_forward_ios),
-                    onTap: (){
-
-                    },
-                  ),
-                ],
-              ).toList(),
-
-//              children: <Widget>[
-//
-//                ListTile(
-//                  title: Text("基本情報"),
-//                  trailing: Icon(Icons.arrow_forward_ios),
-//                ),
-//
-//                ListTile(
-//                  title: Text("ログイン"),
-//                  trailing: Icon(Icons.arrow_forward_ios),
-//                ),
-//                ListTile(
-//                  title: Text("ログアウト"),
-//                  trailing: Icon(Icons.arrow_forward_ios),
-//                ),
-//              ],
-            ),
+                      return Column(
+                            children:
+                            ListTile.divideTiles(
+                              context: context,
+                              tiles: [
+                                ListTile(
+                                  key: Key(todo.id),
+                                  title: Text('基本情報'),
+                                  trailing: Icon(Icons.arrow_forward_ios),
+                                  onTap: () {
+                                    _moveToEditView(
+                                        context, _bloc, todo);
+                                  },
+                                ),
+                                ListTile(
+                                  title: Text('会員登録'),
+                                  trailing: Icon(Icons.arrow_forward_ios),
+                                  onTap: () {
+                                    _moveToCreateView(context, _bloc);
+                                  },
+                                ),
+                                ListTile(
+                                  title: Text('ログアウト'),
+                                  trailing: Icon(Icons.arrow_forward_ios),
+                                  onTap: () {
+//                                  signOut;
+                                  },
+                                ),
+                              ],
+                            ).toList()
+                          );
+                        }
+                      );
+                    }
+                  return Center(child: CircularProgressIndicator());
+                 }
+              ),
           )
-        ],
+        ]
       )
     );
   }
+
+  _moveToEditView(BuildContext context, TodoBloc bloc, Todo todo) => Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => TodoEditView(todoBloc: bloc, todo: todo))
+  );
+
+  _moveToCreateView(BuildContext context, TodoBloc bloc) => Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => TodoNewView(todoBloc: bloc, todo: Todo.newTodo()))
+  );
+
 }
 
 //scrollDirection: Axis.vertical,
 //shrinkWrap: true,
+
+//             StreamBuilder<List<Todo>>(
+//                stream: _bloc.todoStream,
+//                builder: (context, AsyncSnapshot<List<Todo>> snapshot) {
+//                  var listItem = ['基本情報','会員登録','ログアウト'];
+////                  AsyncSnapshot<List<Todo>> todo = snapshot;
+//                  return ListView.builder(
+////                  child: ListView(
+//                      scrollDirection: Axis.vertical,
+//                      shrinkWrap: true,
+//
+//                      itemCount: listItem.length,
+//                      // ignore: missing_return
+//                      itemBuilder: (BuildContext context, int index) {
+////                        Todo todo = snapshot.data[index];
+//
+//                        return Container(
+//                          child: ListTile(
+//                            title: Text(&listItem),
+//                          ),
+//                        );
+//
+//                      }
+//                  );
+//                }
