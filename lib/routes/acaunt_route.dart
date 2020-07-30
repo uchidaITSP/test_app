@@ -4,6 +4,10 @@ import 'package:test_app/view/todo_new/todo_new_view.dart';
 import 'package:test_app/view/todo_edit/todo_edit_view.dart';
 import 'package:test_app/data/CtrQuery/todo_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:test_app/models/user.dart';
+import '../main.dart';
+
 
 class Acount extends StatelessWidget { // <- (※1)
   @override
@@ -18,7 +22,7 @@ class Acount extends StatelessWidget { // <- (※1)
                 child: Text('アカウント'),
               )
             ],
-          )
+          ),
       ),
       body: Container(
 
@@ -33,7 +37,7 @@ class Acount extends StatelessWidget { // <- (※1)
             )
           ],
         ),
-      ) // <- (※3)
+      )// <- (※3)
     );
   }
 }
@@ -132,15 +136,23 @@ class _Acountmain extends StatelessWidget {
                                     _moveToCreateView(context, _bloc);
                                   },
                                 ),
-                                ListTile(
-                                  title: Text('ログアウト'),
-                                  trailing: Icon(Icons.arrow_forward_ios),
-                                  onTap: () {
-//                                  signOut;
-                                  },
-                                ),
-                              ],
-                            ).toList()
+                                 ListTile(
+                    title: Text('ログアウト'),
+                    trailing: Icon(Icons.arrow_forward_ios),
+                    onTap: () async {
+//                      アプリ内に保存されたデータを削除
+                      SharedPreferences preferences = await SharedPreferences.getInstance();
+                      preferences.remove("value");
+                      // 画面をすべて除いてログイン画面を表示
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) => new Login()),
+                              (_) => false);
+                    },
+                  ),
+                ],
+              ).toList(),
                           );
                         }
                       );

@@ -1,6 +1,8 @@
 
+
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
+import 'package:test_app/models/user.dart';
 import 'package:test_app/routes/search_route.dart';
 
 //QRコードスキャン機能
@@ -13,6 +15,7 @@ class Home extends StatelessWidget { // <- (※1)
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
             title: Row(
@@ -139,7 +142,7 @@ class _buttonArea extends State<ScanPage> {
           Expanded(
             child: Column(
               children: <Widget>[
-                Icon(Icons.star),
+                Icon(Icons.location_on),
                 Container(
                   margin: const EdgeInsets.only(top: 15.0),
                   child: Text('現在地からさがす'),
@@ -150,7 +153,7 @@ class _buttonArea extends State<ScanPage> {
           Expanded(
             child: Column(
               children: <Widget>[
-                Icon(Icons.star),
+                Icon(Icons.center_focus_weak),
                 FlatButton(
                   child: Text('QRコードで探す'),
                   onPressed: () async{
@@ -160,6 +163,7 @@ class _buttonArea extends State<ScanPage> {
                       qrCodeResult = codeSander;
                     });
                   },
+
                 )
 //                Container(
 //                  margin: const EdgeInsets.only(top: 15.0),
