@@ -7,20 +7,20 @@ class LoginCtr {
 
 //insertion
   Future<int> saveUser(User user) async {
-    var dbClient = await con.db;
+    var dbClient = await con.database;
     int res = await dbClient.insert("User", user.toMap());
     return res;
   }
 
   //deletion
   Future<int> deleteUser(User user) async {
-    var dbClient = await con.db;
+    var dbClient = await con.database;
     int res = await dbClient.delete("User");
     return res;
   }
 
   Future<User> getLogin(String user, String password) async {
-    var dbClient = await con.db;
+    var dbClient = await con.database;
     var res = await dbClient.rawQuery("SELECT * FROM user WHERE username = '$user' and password = '$password'");
 
     if (res.length > 0) {
@@ -31,7 +31,7 @@ class LoginCtr {
   }
 
   Future<List<User>> getAllUser() async {
-    var dbClient = await con.db;
+    var dbClient = await con.database;
     var res = await dbClient.query("user");
 
     List<User> list =
