@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:test_app/main.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
+import 'package:test_app/data/CtrQuery/todo_bloc.dart';
+import 'package:provider/provider.dart';
+import 'package:test_app/models/todo.dart';
+import 'package:test_app/view/todo_new/todo_new_view.dart';
 
 class Top extends StatelessWidget {
 
@@ -18,8 +22,12 @@ class Top extends StatelessWidget {
 
         ),
            body: PageView(
-           children:[
-             _centerArea(),
+           children: <Widget>[
+              Provider<TodoBloc>(
+              create: (context) => new TodoBloc(),
+              dispose: (context, bloc) => bloc.dispose(),
+              child: _centerArea(),
+              ),
              _menu1(),
              _menu2(),
              _menu3(),
@@ -38,6 +46,7 @@ class _centerArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _bloc = Provider.of<TodoBloc>(context, listen: false);
       return Scaffold(
           body: Center(
             child: Column(
@@ -73,35 +82,77 @@ class _centerArea extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                  child: FlatButton(
-                    child: Text("アカウント登録"),
-                    onPressed: (){
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Login()
-                          )
-                      );
-                    },
+                    padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: StreamBuilder<List<Todo>> (
+                      stream: _bloc.todoStream,
+                      // ignore: missing_return
+                      builder: (context, AsyncSnapshot<List<Todo>> snapshot) {
+                        if (snapshot.hasData) {
+//                 ListView.builderでfor文のような繰り返し処理
+                          return ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+//                        下のcontainerで回しているitemをどれくらい繰り返すか
+                            itemCount: 1,
+//                      // ignore: missing_return
+                            itemBuilder: (BuildContext context, int index) {
+                              return Column(
+                                children: <Widget>[
+                                  Container(
+                                    height: 40,
+                                    margin: EdgeInsets.fromLTRB(48, 0, 48, 0),
+                                    color: Colors.red,
+                                    child: ListTile(
+                                      title: new Center(child: Text('会員登録',style: TextStyle(
+                                          color: Colors.white
+                                      )
+                                      ),),
+                                      onTap: () {
+                                        _moveToCreateView(context, _bloc);
+                                      },
+                                    ),
+                                  )
+                              ]
+                              );
+                            }
+                          );
+                        }
+                        return Center(child: CircularProgressIndicator());
+                      }
+                    )
 
-                    padding: EdgeInsets.fromLTRB(100, 8, 100, 8),
-                    color: Colors.black12,
-                    textColor: Colors.black,
+                  
+//                  child: FlatButton(
+//                    child: Text("アカウント登録"),
+//                    onPressed: (){
+//                      Navigator.push(
+//                          context,
+//                          MaterialPageRoute(
+//                              builder: (context) => Login()
+//                          )
+//                      );
+//                    },
+//
+//                    padding: EdgeInsets.fromLTRB(100, 8, 100, 8),
+//                    color: Colors.black12,
+//                    textColor: Colors.black,
                   ),
+                ]
                 ),
-                Container(
-                  height: 30.0,
-                  child: CirclePageIndicator(
-                    itemCount: 6,
-                    currentPageNotifier: _currentPageNotifier,
-                  ),
-                ),
-              ]
+//                Container(
+//                  height: 30.0,
+//                  child: CirclePageIndicator(
+//                    itemCount: 6,
+//                    currentPageNotifier: _currentPageNotifier,
+//                  ),
+//                ),
           )
-          )
-      );
+          );
   }
+  _moveToCreateView(BuildContext context, TodoBloc bloc) => Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => TodoNewView(todoBloc: bloc, todo: Todo.newTodo()))
+  );
 }
 
 class _menu1 extends StatelessWidget {
