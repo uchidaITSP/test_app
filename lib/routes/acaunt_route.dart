@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:test_app/models/todo.dart';
-import 'package:test_app/view/Top.dart';
 import 'package:test_app/view/todo_new/todo_new_view.dart';
 import 'package:test_app/view/todo_edit/todo_edit_view.dart';
 import 'package:test_app/data/CtrQuery/todo_bloc.dart';
@@ -114,7 +113,7 @@ class _Acountmain extends StatelessWidget {
                         itemBuilder: (BuildContext context, int index) {
 //                        Todoの情報を取得している
 //                      　 indexでデータベースのどこを処理したいかを設定(ここにログインした人の情報を入れる)
-                        Todo todo = snapshot.data[index];
+                        Todo todo = snapshot.data[0];
 
                       return Column(
                             children:
@@ -137,27 +136,29 @@ class _Acountmain extends StatelessWidget {
                                     _moveToCreateView(context, _bloc);
                                   },
                                 ),
-                                 ListTile(
-                                   title: Text('ログアウト'),
-                                   trailing: Icon(Icons.arrow_forward_ios),
-                                   onTap: () async {
-//                                  アプリ内に保存されたデータを削除
+                                ListTile(
+                                 title: Text('ログアウト'),
+                                 trailing: Icon(Icons.arrow_forward_ios),
+                                 onTap: () async {
+//                               アプリ内に保存されたデータを削除
                                   SharedPreferences preferences = await SharedPreferences.getInstance();
                                   preferences.remove("value");
-                      // 画面をすべて除いてログイン画面を表示
+                              // 画面をすべて除いてログイン画面を表示
                                   Navigator.pushAndRemoveUntil(
                                     context,
-                                  new MaterialPageRoute(
-                                    builder: (context) => new Top()),
-                                    (_) => false);
-                                    },
-                                  ),
+                                    new MaterialPageRoute(
+                                      builder: (context) => new Login()
+                                    ),
+                                          (_) => false
+                                  );
+                                 },
+                                ),
                               ],
-                        ).toList(),
-                    );
-                      }
-                    );
-                  }
+                            ).toList(),
+                          );
+                        }
+                      );
+                    }
                   return Center(child: CircularProgressIndicator());
                  }
               ),

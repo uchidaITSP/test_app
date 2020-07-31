@@ -121,13 +121,13 @@ class _HomeState extends State<Investigate> {
 
                         trailing:Column(
                           children: <Widget>[
-//                            Expanded(
-//                              child: IconButton(icon: Icon(Icons.delete, color: Colors.red,),onPressed: (){
-//                                setState(() {
-//                                  helper.delete(course.id);
-//                                });
-//                              },),
-//                            ),
+                            Expanded(
+                              child: IconButton(icon: Icon(Icons.delete, color: Colors.red,),onPressed: (){
+                                setState(() {
+                                  helper.delete(course.id);
+                                });
+                              },),
+                            ),
 //                          Expanded(
 //                            child: IconButton(icon: Icon(Icons.edit, color: Colors.green,),onPressed: (){
 //                              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CourseUpdate(course)));
