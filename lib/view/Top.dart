@@ -13,7 +13,7 @@ class Top extends StatelessWidget {
   final controller = PageController(
     initialPage: 1,
   );
-
+//あ
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
