@@ -4,6 +4,7 @@ import 'package:test_app/models/user.dart';
 import 'package:test_app/services/response/login_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
 class LoginPage extends StatefulWidget {
   @override
 //  createStateでStateを作成
