@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:test_app/models/todo.dart';
+import 'package:test_app/models/user.dart';
+import 'package:test_app/view/Top.dart';
 import 'package:test_app/view/todo_new/todo_new_view.dart';
 import 'package:test_app/view/todo_edit/todo_edit_view.dart';
-import 'package:test_app/data/CtrQuery/todo_bloc.dart';
+import 'package:test_app/data/CtrQuery/user_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_app/models/user.dart';
@@ -30,8 +31,8 @@ class Acount extends StatelessWidget { // <- (※1)
           direction: Axis.horizontal,
           children: <Widget>[
             _Acounttop(),
-            Provider<TodoBloc>(
-              create: (context) => new TodoBloc(),
+            Provider<UserBloc>(
+              create: (context) => new UserBloc(),
               dispose: (context, bloc) => bloc.dispose(),
              child: _Acountmain(),
             )
@@ -84,7 +85,7 @@ class _Acountmain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _bloc = Provider.of<TodoBloc>(context, listen: false);
+    final _bloc = Provider.of<UserBloc>(context, listen: false);
 
 
      return Container(
@@ -96,10 +97,10 @@ class _Acountmain extends StatelessWidget {
             child: Text('アカウント設定'),
           ),
           Container(
-            child: StreamBuilder<List<Todo>> (
-                stream: _bloc.todoStream,
+            child: StreamBuilder<List<User>> (
+                stream: _bloc.userStream,
                 // ignore: missing_return
-                builder: (context, AsyncSnapshot<List<Todo>> snapshot) {
+                builder: (context, AsyncSnapshot<List<User>> snapshot) {
                   if(snapshot.hasData) {
 //                 ListView.builderでfor文のような繰り返し処理
                     return ListView.builder(
@@ -111,9 +112,9 @@ class _Acountmain extends StatelessWidget {
                         itemCount: 1,
 //                      // ignore: missing_return
                         itemBuilder: (BuildContext context, int index) {
-//                        Todoの情報を取得している
+//                        Userの情報を取得している
 //                      　 indexでデータベースのどこを処理したいかを設定(ここにログインした人の情報を入れる)
-                        Todo todo = snapshot.data[0];
+                        User user = snapshot.data[index];
 
                       return Column(
                             children:
@@ -121,12 +122,12 @@ class _Acountmain extends StatelessWidget {
                               context: context,
                               tiles: [
                                 ListTile(
-                                  key: Key(todo.id),
+                                  key: Key(user.id),
                                   title: Text('基本情報'),
                                   trailing: Icon(Icons.arrow_forward_ios),
                                   onTap: () {
                                     _moveToEditView(
-                                        context, _bloc, todo);
+                                        context, _bloc, user);
                                   },
                                 ),
                                 ListTile(
@@ -136,29 +137,27 @@ class _Acountmain extends StatelessWidget {
                                     _moveToCreateView(context, _bloc);
                                   },
                                 ),
-                                ListTile(
-                                 title: Text('ログアウト'),
-                                 trailing: Icon(Icons.arrow_forward_ios),
-                                 onTap: () async {
-//                               アプリ内に保存されたデータを削除
+                                 ListTile(
+                                   title: Text('ログアウト'),
+                                   trailing: Icon(Icons.arrow_forward_ios),
+                                   onTap: () async {
+//                                  アプリ内に保存されたデータを削除
                                   SharedPreferences preferences = await SharedPreferences.getInstance();
                                   preferences.remove("value");
-                              // 画面をすべて除いてログイン画面を表示
+                      // 画面をすべて除いてログイン画面を表示
                                   Navigator.pushAndRemoveUntil(
                                     context,
-                                    new MaterialPageRoute(
-                                      builder: (context) => new Login()
-                                    ),
-                                          (_) => false
-                                  );
-                                 },
-                                ),
+                                  new MaterialPageRoute(
+                                    builder: (context) => new Top()),
+                                    (_) => false);
+                                    },
+                                  ),
                               ],
-                            ).toList(),
-                          );
-                        }
-                      );
-                    }
+                        ).toList(),
+                    );
+                      }
+                    );
+                  }
                   return Center(child: CircularProgressIndicator());
                  }
               ),
@@ -168,14 +167,14 @@ class _Acountmain extends StatelessWidget {
     );
   }
 
-  _moveToEditView(BuildContext context, TodoBloc bloc, Todo todo) => Navigator.push(
+  _moveToEditView(BuildContext context, UserBloc bloc, User user) => Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => TodoEditView(todoBloc: bloc, todo: todo))
+      MaterialPageRoute(builder: (context) => UserEditView(userBloc: bloc, user: user))
   );
 
-  _moveToCreateView(BuildContext context, TodoBloc bloc) => Navigator.push(
+  _moveToCreateView(BuildContext context, UserBloc bloc) => Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => TodoNewView(todoBloc: bloc, todo: Todo.newTodo()))
+      MaterialPageRoute(builder: (context) => UserNewView(userBloc: bloc, user: User.newUser()))
   );
 
 }
@@ -183,11 +182,11 @@ class _Acountmain extends StatelessWidget {
 //scrollDirection: Axis.vertical,
 //shrinkWrap: true,
 
-//             StreamBuilder<List<Todo>>(
-//                stream: _bloc.todoStream,
-//                builder: (context, AsyncSnapshot<List<Todo>> snapshot) {
+//             StreamBuilder<List<User>>(
+//                stream: _bloc.userStream,
+//                builder: (context, AsyncSnapshot<List<User>> snapshot) {
 //                  var listItem = ['基本情報','会員登録','ログアウト'];
-////                  AsyncSnapshot<List<Todo>> todo = snapshot;
+////                  AsyncSnapshot<List<User>> user = snapshot;
 //                  return ListView.builder(
 ////                  child: ListView(
 //                      scrollDirection: Axis.vertical,
@@ -196,7 +195,7 @@ class _Acountmain extends StatelessWidget {
 //                      itemCount: listItem.length,
 //                      // ignore: missing_return
 //                      itemBuilder: (BuildContext context, int index) {
-////                        Todo todo = snapshot.data[index];
+////                        User user = snapshot.data[index];
 //
 //                        return Container(
 //                          child: ListTile(

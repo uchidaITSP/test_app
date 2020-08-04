@@ -12,8 +12,11 @@ class DatabaseHelper {
   static final DatabaseHelper _instance = new DatabaseHelper.internal();
   factory DatabaseHelper() => _instance;
 
+  DatabaseHelper._();
+  static final DatabaseHelper db = DatabaseHelper._();
+
   static Database _db;
-  static final _tableName = "Todo";
+  static final _tableName = "user";
 
   Future<Database> get database async {
     if (_db != null) {
@@ -44,32 +47,32 @@ class DatabaseHelper {
     var ourDb = await openDatabase(path);
     return ourDb;
   }
-  createTodo(Todo todo) async {
+  createUser(User user) async {
     final db = await database;
-    var res = await db.insert(_tableName, todo.toMap());
+    var res = await db.insert(_tableName, user.toMap());
     return res;
   }
 
-  getAllTodos() async {
+  getAllUsers() async {
     final db = await database;
     var res = await db.query(_tableName);
-    List<Todo> list =
-    res.isNotEmpty ? res.map((c) => Todo.fromMap(c)).toList() : [];
+    List<User> list =
+    res.isNotEmpty ? res.map((c) => User.fromMap(c)).toList() : [];
     return list;
   }
 
-  updateTodo(Todo todo) async {
+  updateUser(User user) async {
     final db = await database;
     var res  = await db.update(
         _tableName,
-        todo.toMap(),
+        user.toMap(),
         where: "id = ?",
-        whereArgs: [todo.id]
+        whereArgs: [user.id]
     );
     return res;
   }
 
-  deleteTodo(String id) async {
+  deleteUser(String id) async {
     final db = await database;
     var res = db.delete(
         _tableName,
