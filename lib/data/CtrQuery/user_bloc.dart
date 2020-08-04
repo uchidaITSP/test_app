@@ -4,7 +4,7 @@ import 'package:test_app/models/user.dart';
 
 import 'package:test_app/data/database_helper.dart';
 import 'package:test_app/models/user.dart';
-
+/**/
 class UserBloc {
 
   final _userController = StreamController<List<User>>();
