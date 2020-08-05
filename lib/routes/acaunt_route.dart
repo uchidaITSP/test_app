@@ -9,35 +9,40 @@ import 'package:test_app/models/user.dart';
 import '../main.dart';
 
 
+
 class Acount extends StatelessWidget { // <- (※1)
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('アカウント'),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+          appBar: AppBar(
+              backgroundColor: Colors.grey[50],
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('アカウント',style: TextStyle(color: Colors.black.withOpacity(0.8)),),
+                  )
+                ],
               )
-            ],
           ),
-      ),
-      body: Container(
+          body:Container(
 
-        child: Wrap(
-          direction: Axis.horizontal,
-          children: <Widget>[
-            _Acounttop(),
-            Provider<TodoBloc>(
-              create: (context) => new TodoBloc(),
-              dispose: (context, bloc) => bloc.dispose(),
-             child: _Acountmain(),
-            )
-          ],
-        ),
-      )// <- (※3)
+            child: Wrap(
+              direction: Axis.horizontal,
+              children: <Widget>[
+                _Acounttop(),
+                Provider<TodoBloc>(
+                  create: (context) => new TodoBloc(),
+                  dispose: (context, bloc) => bloc.dispose(),
+                  child: _Acountmain(),
+                )
+              ],
+            ),
+          )// <- (※3)
+      ),
     );
   }
 }
@@ -46,7 +51,7 @@ class _Acounttop extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 150,
-      color: Colors.black12,
+      color: Colors.grey[50],
       child: Row(
         children: <Widget>[
           Icon(
@@ -87,82 +92,96 @@ class _Acountmain extends StatelessWidget {
     final _bloc = Provider.of<TodoBloc>(context, listen: false);
 
 
-     return Container(
-      width: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            child: Text('アカウント設定'),
-          ),
-          Container(
-            child: StreamBuilder<List<Todo>> (
-                stream: _bloc.todoStream,
-                // ignore: missing_return
-                builder: (context, AsyncSnapshot<List<Todo>> snapshot) {
-                  if(snapshot.hasData) {
+    return Container(
+        width: double.infinity,
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                height: 20,
+                margin: EdgeInsets.fromLTRB(14, 0, 0, 0),
+
+
+                child: Text(
+                  'アカウント設定',
+                  style: TextStyle(
+
+//                            fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                    color: Colors.black,
+
+                  ),
+                ),
+
+              ),
+              Container(
+                child: StreamBuilder<List<Todo>> (
+                    stream: _bloc.todoStream,
+                    // ignore: missing_return
+                    builder: (context, AsyncSnapshot<List<Todo>> snapshot) {
+                      if(snapshot.hasData) {
 //                 ListView.builderでfor文のような繰り返し処理
-                    return ListView.builder(
+                        return ListView.builder(
 
 //                  child: ListView(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
 //                        下のcontainerで回しているitemをどれくらい繰り返すか
-                        itemCount: 1,
+                            itemCount: 1,
 //                      // ignore: missing_return
-                        itemBuilder: (BuildContext context, int index) {
+                            itemBuilder: (BuildContext context, int index) {
 //                        Todoの情報を取得している
 //                      　 indexでデータベースのどこを処理したいかを設定(ここにログインした人の情報を入れる)
-                        Todo todo = snapshot.data[1];
+                              Todo todo = snapshot.data[index];
 
-                      return Column(
-                            children:
-                            ListTile.divideTiles(
-                              context: context,
-                              tiles: [
-                                ListTile(
-                                  key: Key(todo.id),
-                                  title: Text('基本情報'),
-                                  trailing: Icon(Icons.arrow_forward_ios),
-                                  onTap: () {
-                                    _moveToEditView(
-                                        context, _bloc, todo);
-                                  },
-                                ),
-                                ListTile(
-                                  title: Text('会員登録'),
-                                  trailing: Icon(Icons.arrow_forward_ios),
-                                  onTap: () {
-                                    _moveToCreateView(context, _bloc);
-                                  },
-                                ),
-                                 ListTile(
-                    title: Text('ログアウト'),
-                    trailing: Icon(Icons.arrow_forward_ios),
-                    onTap: () async {
+                              return Column(
+                                children:
+                                ListTile.divideTiles(
+                                  context: context,
+                                  tiles: [
+                                    ListTile(
+                                      key: Key(todo.id),
+                                      title: Text('基本情報'),
+                                      trailing: Icon(Icons.arrow_forward_ios),
+                                      onTap: () {
+                                        _moveToEditView(
+                                            context, _bloc, todo);
+                                      },
+                                    ),
+                                    ListTile(
+                                      title: Text('会員登録'),
+                                      trailing: Icon(Icons.arrow_forward_ios),
+                                      onTap: () {
+                                        _moveToCreateView(context, _bloc);
+                                      },
+                                    ),
+                                    ListTile(
+                                      title: Text('ログアウト'),
+                                      trailing: Icon(Icons.arrow_forward_ios),
+                                      onTap: () async {
 //                      アプリ内に保存されたデータを削除
-                      SharedPreferences preferences = await SharedPreferences.getInstance();
-                      preferences.remove("value");
-                      // 画面をすべて除いてログイン画面を表示
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          new MaterialPageRoute(
-                              builder: (context) => new Login()),
-                              (_) => false);
-                    },
-                  ),
-                ],
-              ).toList(),
-                          );
-                        }
-                      );
+                                        SharedPreferences preferences = await SharedPreferences.getInstance();
+                                        preferences.remove("value");
+                                        // 画面をすべて除いてログイン画面を表示
+                                        Navigator.pushAndRemoveUntil(
+                                            context,
+                                            new MaterialPageRoute(
+                                                builder: (context) => new Login()),
+                                                (_) => false);
+                                      },
+                                    ),
+                                  ],
+                                ).toList(),
+                              );
+                            }
+                        );
+                      }
+                      return Center(child: CircularProgressIndicator());
                     }
-                  return Center(child: CircularProgressIndicator());
-                 }
-              ),
-          )
-        ]
-      )
+                ),
+              )
+            ]
+        )
     );
   }
 

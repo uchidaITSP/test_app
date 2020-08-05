@@ -1,4 +1,4 @@
-import 'package:test_app/model/course.dart';
+import 'package:test_app/models/course.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -13,12 +13,13 @@ class DbHelper{
     if(_db != null){
       return _db;
     }
+
     //define the path to the database
     String path = join(await getDatabasesPath(), 'school.db');
     _db = await openDatabase(path,version: 2, onCreate: (Database db, int v){
       //create tables
-      db.execute('create table courses(id integer primary key autoincrement, name varchar(50), content varchar(255), hours integer)');
-
+      db.execute('create table courses(id integer primary key autoincrement, name varchar(50), content varchar(255))');
+//      db.execute('create table courses(id integer primary key autoincrement, name varchar(50), content varchar(255), hours integer)');
     },onUpgrade: (Database db, int oldV, int newV) async{
 //      if(oldV < newV) {
 //        await db.execute("alter table courses add column level varchar(50) ");

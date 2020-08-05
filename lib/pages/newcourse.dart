@@ -1,5 +1,5 @@
 import 'package:test_app/dbhelper.dart';
-import 'package:test_app/model/course.dart';
+import 'package:test_app/models/course.dart';
 import 'package:flutter/material.dart';
 
 class NewCourse extends StatefulWidget {
@@ -27,7 +27,7 @@ class _NewCourseState extends State<NewCourse> {
             children: <Widget>[
               TextFormField(
                 decoration: InputDecoration(
-                    hintText: 'Enter Course name'
+                    hintText: '病名'
                 ),
                 onChanged: (value){
                   setState(() {
@@ -39,7 +39,7 @@ class _NewCourseState extends State<NewCourse> {
               TextFormField(
                 maxLines: 10,
                 decoration: InputDecoration(
-                    hintText: 'Enter Course Content'
+                    hintText: '説明'
                 ),
                 onChanged: (value){
                   setState(() {
@@ -48,17 +48,18 @@ class _NewCourseState extends State<NewCourse> {
                 },
               ),
               SizedBox(height: 15,),
-              TextFormField(
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                    hintText: 'Enter Course hours'
-                ),
-                onChanged: (value){
-                  setState(() {
-                    hours = int.parse(value);
-                  });
-                },
-              ),
+//              TextFormField(
+//                keyboardType: TextInputType.number,
+//                decoration: InputDecoration(
+//                    hintText: 'Enter Course hours'
+//                ),
+//                onChanged: (value){
+//                  setState(() {
+//                    hours = int.parse(value);
+//                  });
+//                },
+//              ),
+
               SizedBox(height: 15,),
               RaisedButton(
                 child: Text('Save'),

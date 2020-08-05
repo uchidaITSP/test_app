@@ -39,6 +39,7 @@ class _centerArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
       return Scaffold(
+
           body: Center(
             child: Column(
               children: <Widget>[
@@ -55,7 +56,7 @@ class _centerArea extends StatelessWidget {
                   )
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(0, 210, 0, 0),
+                  padding: EdgeInsets.fromLTRB(0, 130, 0, 0),
                   child: FlatButton(
                     child: Text("ログイン"),
                     onPressed: (){
@@ -115,7 +116,7 @@ class _menu1 extends StatelessWidget {
                     padding: EdgeInsets.fromLTRB(0, 70, 0, 0),
                     child: SizedBox(
                       width: 300,
-                      height: 300,
+                      height: 250,
                       child: FlatButton(
                         color: Colors.black12,
                         onPressed: () {
@@ -182,7 +183,7 @@ class _menu2 extends StatelessWidget {
                   Container(
                     child: SizedBox(
                       width: 300,
-                      height: 150,
+                      height: 100,
                       child: Text("かかりつけの病院・クリニックをさがして、診察予約をしましょう。保険証ではカメラで撮影して提出でき、問診票もアプリで回答できます。",style: TextStyle(
                           fontSize: 17,
                           color: Colors.black54
@@ -237,7 +238,7 @@ class _menu3 extends StatelessWidget {
                   Container(
                     child: SizedBox(
                       width: 300,
-                      height: 150,
+                      height: 100,
                       child: Text("予約時間になったらビデオチャットで医師の診察を受けられます。通院のための移動時間や待合室での待ち時間を気にする必要はありません。",style: TextStyle(
                           fontSize: 17,
                           color: Colors.black54
@@ -292,7 +293,7 @@ class _menu4 extends StatelessWidget {
                   Container(
                     child: SizedBox(
                       width: 300,
-                      height: 150,
+                      height: 100,
                       child: Text("会計の順番を待ったり、事前に現金を用意しなくても、診察後にクレジットカードで会計が完了します。",style: TextStyle(
                           fontSize: 17,
                           color: Colors.black54
@@ -347,7 +348,7 @@ class _menu5 extends StatelessWidget {
                   Container(
                     child: SizedBox(
                       width: 300,
-                      height: 150,
+                      height: 100,
                       child: Text("薬や処方せんは登録した住所までお届け。今までにない新しい通院のスタイルがオンライン診療アプリCLINICSです。",style: TextStyle(
                           fontSize: 17,
                           color: Colors.black54

@@ -1,5 +1,3 @@
-
-
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:test_app/models/user.dart';
@@ -13,42 +11,51 @@ class ScanPage extends StatefulWidget {
 
 class Home extends StatelessWidget { // <- (※1)
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('CLINIX'),
-                )
-              ],
-            )
-        ),
-        body: Container(
+Widget build(BuildContext context) {
+  return MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: Scaffold(
+      appBar: AppBar(
+
+        backgroundColor: Colors.grey[50],
+          title: Row(
+
+            mainAxisAlignment: MainAxisAlignment.center,
+
+            children: [
+              Icon(Icons.inbox,color: Colors.red,),
+              Container(
+
+                padding: const EdgeInsets.all(8.0),
+                child: Text('CLINIX',
+                  style: TextStyle(color: Colors.black.withOpacity(0.8)),),
+
+
+              )
+            ],
+          )
+      ),
+      body: Container(
 //        width: 350,
 //        height: 250,
 //        color: Colors.black12,
-          margin: EdgeInsets.all(30),
+        margin: EdgeInsets.all(30),
 //        padding: EdgeInsets.fromLTRB(20,60,20,20),
-          child: Column(
+        child: Column(
 
 //          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 //          crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              _topArea(),
-              _titleArea(),
-              ScanPage(),
-              _bottomArea()
-            ],
-          ),
+          children: <Widget>[
+            _topArea(),
+            _titleArea(),
+            ScanPage(),
+            _bottomArea()
+          ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }
 
 class _topArea extends StatelessWidget {
@@ -57,7 +64,7 @@ class _topArea extends StatelessWidget {
     return Container(
         width: 350,
         height: 250,
-        color: Colors.black12,
+        color: Colors.grey[200],
         padding: EdgeInsets.fromLTRB(20, 60, 20, 20),
         child: Column(
             children: <Widget>[
@@ -73,14 +80,14 @@ class _topArea extends StatelessWidget {
                       RaisedButton(
                         child: Text("医療機関をさがす"),
                         textColor: Colors.white,
-                        color: Colors.red,
+                        color: Colors.pink[400],
                         shape: StadiumBorder(),
                         onPressed: () {
                           Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Search(),
-                            )
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Search(),
+                              )
                           );
                         },
                       ),
@@ -99,8 +106,8 @@ class _titleArea extends StatelessWidget {
     return Container(
       width: 350,
       height: 100,
-      color: Colors.black12,
-      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+      color: Colors.grey[200],
+      margin: EdgeInsets.fromLTRB(0, 10, 0, 20),
       padding: EdgeInsets.fromLTRB(10, 28, 10, 10),
       child: Row(
         children: <Widget>[
@@ -142,6 +149,7 @@ class _buttonArea extends State<ScanPage> {
         children: <Widget>[
           Expanded(
             child: Column(
+
               children: <Widget>[
                 Icon(Icons.location_on),
                 Container(

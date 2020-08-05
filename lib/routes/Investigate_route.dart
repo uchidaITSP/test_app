@@ -14,7 +14,7 @@
 //}
 
 import 'package:test_app/dbhelper.dart';
-import 'package:test_app/model/course.dart';
+import 'package:test_app/models/course.dart';
 import 'package:test_app/pages/newcourse.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +22,7 @@ import 'package:test_app/pages/courseupdate.dart';
 
 import '../dbhelper.dart';
 import 'package:test_app/pages/coursedetails.dart';
+
 
 class Investigate extends StatefulWidget {
   @override
@@ -73,6 +74,7 @@ class _HomeState extends State<Investigate> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+//          backgroundColor: Colors.grey[50],
           title: Text('検索'),
           actions: <Widget>[
             IconButton(
@@ -121,13 +123,13 @@ class _HomeState extends State<Investigate> {
 
                         trailing:Column(
                           children: <Widget>[
-//                            Expanded(
-//                              child: IconButton(icon: Icon(Icons.delete, color: Colors.red,),onPressed: (){
-//                                setState(() {
-//                                  helper.delete(course.id);
-//                                });
-//                              },),
-//                            ),
+                            Expanded(
+                              child: IconButton(icon: Icon(Icons.delete, color: Colors.red,),onPressed: (){
+                                setState(() {
+                                  helper.delete(course.id);
+                                });
+                              },),
+                            ),
 //                          Expanded(
 //                            child: IconButton(icon: Icon(Icons.edit, color: Colors.green,),onPressed: (){
 //                              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CourseUpdate(course)));
