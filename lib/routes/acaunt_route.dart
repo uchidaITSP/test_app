@@ -42,52 +42,64 @@ class Acount extends StatelessWidget { // <- (※1)
     );
   }
 }
+
 class _Acounttop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 150,
-      color: Colors.black12,
-      child: Row(
-        children: <Widget>[
-          Icon(
-            Icons.account_circle,size: 60,
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return FutureBuilder(
+      future: getName(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return Container(
+            height: 150,
+            color: Colors.black12,
+            child: Row(
               children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.fromLTRB(5, 50, 0, 5),
-                  child: Text("粟谷陸"),
+                Icon(
+                  Icons.account_circle, size: 60,
                 ),
-                Flexible(
-                  child: Row(
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                          child: Text('メールアドレス登録'),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(5, 50, 0, 5),
+                        child: Text(snapshot.data),
+                      ),
+                      Flexible(
+                        child: Row(
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                child: Text('メールアドレス登録'),
+                              ),
+                              Icon(Icons.arrow_forward_ios)
+                            ]
                         ),
-                        Icon(Icons.arrow_forward_ios)
-                      ]
+                      )
+                    ],
                   ),
-                )
+                ),
               ],
             ),
-          ),
-        ],
-      ),
+          );
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
     );
   }
 }
 
 class _Acountmain extends StatelessWidget {
 
+  int num;
   @override
   Widget build(BuildContext context) {
+    getId().then((value){
+      num = value;
+    });
     final _bloc = Provider.of<UserBloc>(context, listen: false);
-
-
      return Container(
       width: double.infinity,
       child: Column(
@@ -114,7 +126,7 @@ class _Acountmain extends StatelessWidget {
                         itemBuilder: (BuildContext context, int index) {
 //                        Userの情報を取得している
 //                      　 indexでデータベースのどこを処理したいかを設定(ここにログインした人の情報を入れる)
-                        User user = snapshot.data[index];
+                        User user = snapshot.data[num];
 
                       return Column(
                             children:
@@ -144,6 +156,9 @@ class _Acountmain extends StatelessWidget {
 //                                  アプリ内に保存されたデータを削除
                                   SharedPreferences preferences = await SharedPreferences.getInstance();
                                   preferences.remove("value");
+                                  preferences.remove("id");
+                                  preferences.remove("user");
+                                  preferences.remove("pass");
                       // 画面をすべて除いてログイン画面を表示
                                   Navigator.pushAndRemoveUntil(
                                     context,
@@ -179,30 +194,24 @@ class _Acountmain extends StatelessWidget {
 
 }
 
-//scrollDirection: Axis.vertical,
-//shrinkWrap: true,
+  getName() async {
+    String str;
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    try {
+      str = preferences.get("user");
+    } catch(e){
+      print(e);
+    }
+    return str;
+  }
 
-//             StreamBuilder<List<User>>(
-//                stream: _bloc.userStream,
-//                builder: (context, AsyncSnapshot<List<User>> snapshot) {
-//                  var listItem = ['基本情報','会員登録','ログアウト'];
-////                  AsyncSnapshot<List<User>> user = snapshot;
-//                  return ListView.builder(
-////                  child: ListView(
-//                      scrollDirection: Axis.vertical,
-//                      shrinkWrap: true,
-//
-//                      itemCount: listItem.length,
-//                      // ignore: missing_return
-//                      itemBuilder: (BuildContext context, int index) {
-////                        User user = snapshot.data[index];
-//
-//                        return Container(
-//                          child: ListTile(
-//                            title: Text(&listItem),
-//                          ),
-//                        );
-//
-//                      }
-//                  );
-//                }
+  getId() async {
+    int num = 0;
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    try {
+      num = int.parse(preferences.get("id").toString());
+    } catch(e){
+      print(e);
+    }
+    return num;
+  }

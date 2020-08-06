@@ -163,11 +163,12 @@ class _LoginPageState extends State<LoginPage> implements LoginCallBack {
   }
 
 //  ログイン成功時に値を入れる
-  savePref(int value,String user, String pass) async {
+  savePref(int value,String id, String user, String pass) async {
 //    SharedPreferences でアプリのほうにデータを残す→再起動してもそのまま
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       preferences.setInt("value", value);
+      preferences.setString("id", id);
       preferences.setString("user", user);
       preferences.setString("pass", pass);
       preferences.commit();
@@ -187,7 +188,7 @@ class _LoginPageState extends State<LoginPage> implements LoginCallBack {
 
 //    userに何か入っている→ログインに成功
     if(user != null){
-      savePref(1,user.username, user.password);
+      savePref(1,user.id, user.username, user.password);
       _loginStatus = LoginStatus.signIn;
 //      userに何も入っていない→ログインに失敗
     }else{
