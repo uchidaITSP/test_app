@@ -4,7 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_app/root.dart';
 import 'package:test_app/screen/login_screen.dart';
-
+/*あ*/
 
 void main() => runApp(new Login());
 

@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:test_app/main.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
+import 'package:test_app/data/CtrQuery/user_bloc.dart';
+import 'package:provider/provider.dart';
+import 'package:test_app/models/user.dart';
+import 'package:test_app/view/todo_new/todo_new_view.dart';
+import 'package:page_indicator/page_indicator.dart';
 
 class Top extends StatelessWidget {
 
@@ -9,7 +14,7 @@ class Top extends StatelessWidget {
   final controller = PageController(
     initialPage: 1,
   );
-
+//あ
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,17 +22,33 @@ class Top extends StatelessWidget {
         appBar: AppBar(
 
         ),
-           body: PageView(
-           children:[
-             _centerArea(),
-             _menu1(),
-             _menu2(),
-             _menu3(),
-             _menu4(),
-             _menu5(),
+          body: Container(
+              child: PageIndicatorContainer(
+                child: PageView(
+                  children: <Widget>[
+                    Provider<UserBloc>(
+                      create: (context) => new UserBloc(),
+                      dispose: (context, bloc) => bloc.dispose(),
+                      child: _centerArea(),
+                    ),
+                    _menu1(),
+                    _menu2(),
+                    _menu3(),
+                    _menu4(),
+                    _menu5(),
 
-           ]
-           )
+                  ],
+                  controller: controller,
+                ),
+                align: IndicatorAlign.bottom,
+                length: 6,
+                indicatorSpace: 20.0,
+                padding: const EdgeInsets.all(10),
+                indicatorColor: Colors.black12,
+                indicatorSelectorColor: Colors.blue,
+                shape: IndicatorShape.circle(size: 12),
+              )
+          )
       )
     );
   }
@@ -38,6 +59,7 @@ class _centerArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _bloc = Provider.of<UserBloc>(context, listen: false);
       return Scaffold(
 
           body: Center(
@@ -74,35 +96,77 @@ class _centerArea extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                  child: FlatButton(
-                    child: Text("アカウント登録"),
-                    onPressed: (){
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Login()
-                          )
-                      );
-                    },
+                    padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: StreamBuilder<List<User>> (
+                      stream: _bloc.userStream,
+                      // ignore: missing_return
+                      builder: (context, AsyncSnapshot<List<User>> snapshot) {
+                        if (snapshot.hasData) {
+//                 ListView.builderでfor文のような繰り返し処理
+                          return ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+//                        下のcontainerで回しているitemをどれくらい繰り返すか
+                            itemCount: 1,
+//                      // ignore: missing_return
+                            itemBuilder: (BuildContext context, int index) {
+                              return Column(
+                                children: <Widget>[
+                                  Container(
+                                    height: 40,
+                                    margin: EdgeInsets.fromLTRB(48, 0, 48, 0),
+                                    color: Colors.red,
+                                    child: ListTile(
+                                      title: new Center(child: Text('会員登録',style: TextStyle(
+                                          color: Colors.white
+                                      )
+                                      ),),
+                                      onTap: () {
+                                        _moveToCreateView(context, _bloc);
+                                      },
+                                    ),
+                                  )
+                              ]
+                              );
+                            }
+                          );
+                        }
+                        return Center(child: CircularProgressIndicator());
+                      }
+                    )
 
-                    padding: EdgeInsets.fromLTRB(100, 8, 100, 8),
-                    color: Colors.black12,
-                    textColor: Colors.black,
+                  
+//                  child: FlatButton(
+//                    child: Text("アカウント登録"),
+//                    onPressed: (){
+//                      Navigator.push(
+//                          context,
+//                          MaterialPageRoute(
+//                              builder: (context) => Login()
+//                          )
+//                      );
+//                    },
+//
+//                    padding: EdgeInsets.fromLTRB(100, 8, 100, 8),
+//                    color: Colors.black12,
+//                    textColor: Colors.black,
                   ),
+                ]
                 ),
-                Container(
-                  height: 30.0,
-                  child: CirclePageIndicator(
-                    itemCount: 6,
-                    currentPageNotifier: _currentPageNotifier,
-                  ),
-                ),
-              ]
+//                Container(
+//                  height: 30.0,
+//                  child: CirclePageIndicator(
+//                    itemCount: 6,
+//                    currentPageNotifier: _currentPageNotifier,
+//                  ),
+//                ),
           )
-          )
-      );
+          );
   }
+  _moveToCreateView(BuildContext context, UserBloc bloc) => Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => UserNewView(userBloc: bloc, user: User.newUser()))
+  );
 }
 
 class _menu1 extends StatelessWidget {
