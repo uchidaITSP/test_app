@@ -7,7 +7,7 @@ class Course{
     _id = obj['id'];
     _name = obj['name'];
     _content = obj['content'];
-    _hours = obj['hours'];
+
   }
   Course.fromMap(Map<String, dynamic> data){
     _id = data['id'];
@@ -15,9 +15,9 @@ class Course{
     _content = data['content'];
     _hours = data['hours'];
   }
-  Map<String, dynamic> toMap() => {'id' : _id, 'name': _name,'content' : _content,'hours':_hours};
+  Map<String, dynamic> toMap() => {'id' : _id, 'name': _name,'content' : _content};
   int get id => _id;
   String get name => _name;
   String get content => _content;
-  int get hours => _hours;
+//  int get hours => _hours;
 }

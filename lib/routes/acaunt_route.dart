@@ -10,21 +10,41 @@ import 'package:test_app/models/user.dart';
 import '../main.dart';
 
 
+
 class Acount extends StatelessWidget { // <- (※1)
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('アカウント'),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+          appBar: AppBar(
+              backgroundColor: Colors.grey[50],
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('アカウント',style: TextStyle(color: Colors.black.withOpacity(0.8)),),
+                  )
+                ],
               )
-            ],
           ),
+          body:Container(
+
+            child: Wrap(
+              direction: Axis.horizontal,
+              children: <Widget>[
+                _Acounttop(),
+                Provider<TodoBloc>(
+                  create: (context) => new TodoBloc(),
+                  dispose: (context, bloc) => bloc.dispose(),
+                  child: _Acountmain(),
+                )
+              ],
+            ),
+          )// <- (※3)
       ),
+
       body: Container(
 
         child: Wrap(
@@ -39,6 +59,7 @@ class Acount extends StatelessWidget { // <- (※1)
           ],
         ),
       )// <- (※3)
+
     );
   }
 }
@@ -46,6 +67,8 @@ class Acount extends StatelessWidget { // <- (※1)
 class _Acounttop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+
     return FutureBuilder(
       future: getName(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -54,6 +77,7 @@ class _Acounttop extends StatelessWidget {
             height: 150,
             color: Colors.black12,
             child: Row(
+
               children: <Widget>[
                 Icon(
                   Icons.account_circle, size: 60,
@@ -96,6 +120,7 @@ class _Acountmain extends StatelessWidget {
   int num;
   @override
   Widget build(BuildContext context) {
+
     getId().then((value){
       num = value;
     });
@@ -114,15 +139,17 @@ class _Acountmain extends StatelessWidget {
                 // ignore: missing_return
                 builder: (context, AsyncSnapshot<List<User>> snapshot) {
                   if(snapshot.hasData) {
+
 //                 ListView.builderでfor文のような繰り返し処理
-                    return ListView.builder(
+                        return ListView.builder(
 
 //                  child: ListView(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
 //                        下のcontainerで回しているitemをどれくらい繰り返すか
-                        itemCount: 1,
+                            itemCount: 1,
 //                      // ignore: missing_return
+
                         itemBuilder: (BuildContext context, int index) {
 //                        Userの情報を取得している
 //                      　 indexでデータベースのどこを処理したいかを設定(ここにログインした人の情報を入れる)
@@ -179,6 +206,7 @@ class _Acountmain extends StatelessWidget {
           )
         ]
       )
+
     );
   }
 
@@ -205,6 +233,7 @@ class _Acountmain extends StatelessWidget {
     return str;
   }
 
+
   getId() async {
     int num = 0;
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -215,3 +244,4 @@ class _Acountmain extends StatelessWidget {
     }
     return num;
   }
+

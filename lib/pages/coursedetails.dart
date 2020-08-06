@@ -1,4 +1,4 @@
-import 'package:test_app/model/course.dart';
+import 'package:test_app/models/course.dart';
 import 'package:flutter/material.dart';
 class CourseDetails extends StatelessWidget {
   Course course;

@@ -9,6 +9,7 @@ import 'routes/search_route.dart';
 import 'routes/news_route.dart';
 import 'routes/acaunt_route.dart';
 import 'routes/Investigate_route.dart';
+import 'file:///C:/Users/fujihara.ryusuke/AndroidStudioProjects/test_app/lib/routes/medical_root.dart';
 
 class RootWidget extends StatefulWidget {
   @override
@@ -24,7 +25,7 @@ class _RootWidget extends State<RootWidget>{
     'さがす' : {'icon': Icons.search, 'route':Search()},
     'お知らせ' : {'icon': Icons.notifications, 'route':News()},
     'アカウント' : {'icon': Icons.person, 'route':Acount()},
-    '調べる' : {'icon':Icons.book,'route':Investigate()},
+    '調べる' : {'icon':Icons.book,'route':Medical()},
   };
 
   final List _RootWidgetItemOrder = [
